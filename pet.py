@@ -97,6 +97,7 @@ def quiz(qnum, df):
     elif qnum == 25:
         df_n = pd.DataFrame(np.random.randint(0, 2, size=(10, 3)))
         ic(df_n)
+        ic(df_n.drop_duplicates(keep=False))
     elif qnum == 26:
         nan = np.nan
         data = [[0.04, nan, nan, 0.25, nan, 0.43, 0.71, 0.51, nan, nan],
@@ -107,6 +108,7 @@ def quiz(qnum, df):
         columns = list('abcdefghij')
         df_n = pd.DataFrame(data, columns=columns)
         ic(df_n)
+        '''
         cnt = [0 for i in df_n.index.values]
         answer = ['' for i in df_n.index.values]
         for i in df_n.columns.values:
@@ -116,26 +118,35 @@ def quiz(qnum, df):
                 if cnt[j] == 3:
                     answer[j] = i
         ic(answer)
+        '''
+        df_n = (df_n.isnull().cumsum(axis=1) == 3).idxmax(axis=1)
+        ic(df_n)
     elif qnum == 27:
-        pass
+        df_n = pd.DataFrame({'grps': list('aaabbcaabcccbbc'),
+                           'vals': [12, 345, 3, 1, 45, 14, 4, 52, 54, 23, 235, 21, 57, 3, 87]})
+        ic(df_n)
+        df_n = df_n.groupby('grps')['vals'].max()
+        ic(df_n)
     elif qnum == 28:
         df_n = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
         ic(df_n)
-        ic([np.array(df_n[i].tolist()) for i in df_n.columns.values])
+        # ic([np.array(df_n[i].tolist()) for i in df_n.columns.values]) 틀렸음
+        ic(df_n.values.tolist())
     elif qnum == 29:
         df_n = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
         ic(df_n)
-        ic(df_n.to_dict('list'))
+        ic(df_n.to_dict())
     elif qnum == 30:
         df_n = pd.DataFrame({"customer_id": ['kim', 'lee', 'park', 'song', 'yoon', 'kang', 'tak', 'ryu', 'jang'],
                            "product_code": ['com', 'phone', 'tv', 'com', 'phone', 'tv', 'com', 'phone', 'tv'],
                            "grade": ['A', 'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B'],
                            "purchase_amount": [30, 10, 0, 40, 15, 30, 0, 0, 10]})
         ic(df_n)
-        ic(df_n.pivot_table(index='customer_id', columns='product_code', values='purchase_amount', aggfunc='any'))
+        ic(df_n.pivot(index='customer_id', columns='product_code', values='purchase_amount'))
+        res = df_n
     elif qnum == 31:
-        pass
-
+        df_n = pd.pivot(df, index=['customer_id', 'grade'], columns='product_code', values='purchase_amount')
+        ic(df_n)
     return res
 
 
